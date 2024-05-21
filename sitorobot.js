@@ -7,7 +7,7 @@ window.addEventListener("DOMContentLoaded",()=>{
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   canvas.style.display = 'block';
-  document.appendChild(canvas);
+  document.body.appendChild(canvas);
 
   document.body.style.margin = 0;
 
