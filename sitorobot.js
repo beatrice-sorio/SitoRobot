@@ -21,8 +21,11 @@ if (!!window.EventSource) {
   }, false);
 
   source.addEventListener('message', function (e) {
-    let obj = JSON.parse(e.data);
-    ctx.fillRect(window.innerWidth/2,window.innerHeight/2,100,300*Number(obj.t1)/4095)
-    console.log("message", e.data);
+    try {
+      let obj = JSON.parse(e.data);
+      ctx.fillRect(window.innerWidth/2,window.innerHeight/2,100,300*Number(obj.t1)/4095) 
+    } catch (error) {     
+      console.log("message", e.data); 
+    }
   }, false);
 }
