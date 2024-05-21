@@ -1,5 +1,22 @@
 console.log(document);
 
+if (!!window.EventSource) {
+  var source = new EventSource('/events');
+  
+  source.addEventListener('open', function(e) {
+   console.log("Events Connected");
+  }, false);
+  source.addEventListener('error', function(e) {
+   if (e.target.readyState != EventSource.OPEN) {
+     console.log("Events Disconnected");
+   }
+  }, false);
+  
+  source.addEventListener('message', function(e) {
+   console.log("message", e.data);
+  }, false);
+}
+
 window.addEventListener("DOMContentLoaded",()=>{
 
   let canvas = document.createElement('canvas');
@@ -10,21 +27,4 @@ window.addEventListener("DOMContentLoaded",()=>{
   document.body.appendChild(canvas);
 
   document.body.style.margin = 0;
-
-  if (!!window.EventSource) {
-    var source = new EventSource('/events');
-    
-    source.addEventListener('open', function(e) {
-     console.log("Events Connected");
-    }, false);
-    source.addEventListener('error', function(e) {
-     if (e.target.readyState != EventSource.OPEN) {
-       console.log("Events Disconnected");
-     }
-    }, false);
-    
-    source.addEventListener('message', function(e) {
-     console.log("message", e.data);
-    }, false);
-   }
 })
