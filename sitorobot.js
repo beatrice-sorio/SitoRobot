@@ -23,6 +23,7 @@ if (!!window.EventSource) {
   source.addEventListener('message', function (e) {
     try {
       let obj = JSON.parse(e.data);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.fillRect(window.innerWidth/2,window.innerHeight/2,100,300*Number(obj.t1)/4095) 
     } catch (error) {     
       console.log("message", e.data); 
