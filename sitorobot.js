@@ -1,4 +1,4 @@
-console.log("CIAO MONDO");
+console.log(document);
 if (!!window.EventSource) {
  var source = new EventSource('/events');
  
