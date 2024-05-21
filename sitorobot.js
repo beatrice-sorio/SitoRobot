@@ -1,5 +1,13 @@
 console.log(document);
 
+let canvas = document.createElement('canvas');
+let ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+canvas.style.display = 'block';
+document.body.appendChild(canvas);
+document.body.style.margin = 0;
+
 if (!!window.EventSource) {
   var source = new EventSource('/events');
 
@@ -13,17 +21,8 @@ if (!!window.EventSource) {
   }, false);
 
   source.addEventListener('message', function (e) {
+    let obj = JSON.parse(e.data);
+    ctx.fillRect(window.innerWidth/2,window.innerHeight/2,100,300*Number(obj.t1)/4095)
     console.log("message", e.data);
   }, false);
 }
-
-
-console.log('va');
-let canvas = document.createElement('canvas');
-let ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-canvas.style.display = 'block';
-document.body.appendChild(canvas);
-
-document.body.style.margin = 0;
