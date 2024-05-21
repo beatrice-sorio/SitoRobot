@@ -15,10 +15,10 @@ if (!!window.EventSource) {
   source.addEventListener('message', function(e) {
    console.log("message", e.data);
   }, false);
-}
-
-window.addEventListener("DOMContentLoaded",()=>{
-
+ }
+ 
+window.onload = ()=>{
+  console.log('va');
   let canvas = document.createElement('canvas');
   let ctx = canvas.getContext('2d');
   canvas.width = window.innerWidth;
@@ -27,4 +27,4 @@ window.addEventListener("DOMContentLoaded",()=>{
   document.body.appendChild(canvas);
 
   document.body.style.margin = 0;
-})
+}
