@@ -12,6 +12,7 @@ document.body.appendChild(threejs);
 
 let renderer = null;
 let moveArm = null;
+let camera = null;
 
 window.initTHREE = (THREE,GLTFLoader)=>{
   const loader = new GLTFLoader();
@@ -22,7 +23,7 @@ window.initTHREE = (THREE,GLTFLoader)=>{
   
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0xffffff);
-  const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+  camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
   const braccio = new THREE.Group();
   const b1 = new THREE.Mesh(new THREE.BoxGeometry( 1, 1, 1 ), new THREE.MeshBasicMaterial( { color: 0x002f00 } ));
@@ -76,7 +77,7 @@ let btn_menu = document.createElement('button');
 btn_menu.style.backgroundColor = "#73C2FB";
 btn_menu.style.borderRadius = "100%"
 btn_menu.style.borderColor = "#111E6C"
-btn_menu.style.marginTop = "400px"
+btn_menu.style.marginTop = "300px"
 menu.appendChild(btn_menu);
 document.body.appendChild(menu);
 document.body.style.backgroundColor = "#1D2951"
@@ -85,7 +86,9 @@ clicked_f = ()=>{
   menu.style.display = "none";
   renderer.domElement.style.display = "block";
   document.body.style.margin = "0";
+  document.body.style.overflow = "hidden";
   document.body.appendChild( renderer.domElement );
+  renderer.domElement.style.display = "block";
 }
 
 btn_menu.onclick = ()=>{
@@ -114,7 +117,11 @@ function onResize(){
   title.style.fontSize = biggest/15 + "px";
   btn_menu.style.width = biggest/10 + "px";
   btn_menu.style.height = biggest/10 + "px";
-  if(renderer) renderer.setSize( window.innerWidth, window.innerHeight );
+  if(renderer){
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  }
   //canvas.width = window.innerWidth;
   //canvas.height = window.innerHeight;
 }
