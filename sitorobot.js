@@ -1,14 +1,20 @@
+let importmap = document.createElement('script');
+importmap.type = "importmap";
+importmap.innerHTML = '{"imports": {"three": "https://cdn.jsdelivr.net/npm/three/build/three.module.js","three/addons/": "https://cdn.jsdelivr.net/npm/three/examples/jsm/"}}';
+document.body.appendChild(importmap);
+
 let threejs = document.createElement('script')
 threejs.type = "module";
-threejs.innerHTML = "import * as THREE from 'https://cdn.jsdelivr.net/npm/three/build/three.module.js';window.THREE = THREE";
+threejs.innerHTML = "import * as THREE from 'three';";
+threejs.innerHTML += "import * as GLTFLoader from 'three/addons/loaders/GLTFLoader.js';";
+threejs.innerHTML += "window.initTHREE(THREE,GLTFLoader.GLTFLoader);";
 document.body.appendChild(threejs);
 
 let renderer = null;
 let moveArm = null;
 
-function init(){
-  let THREE = window.THREE;
-
+window.initTHREE = (THREE,GLTFLoader)=>{
+  const loader = new GLTFLoader();
   let clock = new THREE.Clock();
   
   renderer = new THREE.WebGLRenderer();
@@ -18,9 +24,15 @@ function init(){
   scene.background = new THREE.Color(0xffffff);
   const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
-  const cube = new THREE.Mesh(new THREE.BoxGeometry( 1, 1, 1 ), new THREE.MeshBasicMaterial( { color: 0x00ff00 } ));
-  cube.position.set(0,0,-10);
-  scene.add(cube);
+  const braccio = new THREE.Group();
+  const b1 = new THREE.Mesh(new THREE.BoxGeometry( 1, 1, 1 ), new THREE.MeshBasicMaterial( { color: 0x002f00 } ));
+  b1.position.set(0,-4,0);
+  const b2 = new THREE.Mesh(new THREE.BoxGeometry( 1, 1, 1 ), new THREE.MeshBasicMaterial( { color: 0x002f00 } ));
+  b2.position.set(0,-2,0);
+  braccio.add(b1);
+  braccio.add(b2);
+  scene.add(braccio);
+  braccio.position.set(0,0,-10);
 
   camera.position.set(0,0,0);
   camera.lookAt(0,0,-10);
@@ -30,6 +42,7 @@ function init(){
    */
 
   moveArm = (dati)=>{
+    console.log(dati);
     //dati t1,t2,t3,t4 i 4 trimmers
   }
 
@@ -37,26 +50,13 @@ function init(){
   let animate = ()=>{
     requestAnimationFrame( animate );
     dt = clock.getDelta();
-
-    cube.rotateY(dt*Math.PI);
-    cube.rotateX(dt*Math.PI);
-  
+    braccio.rotateY(Math.PI*.5*dt)
+    b2.rotateX(Math.PI*.5*dt)
     renderer.render( scene, camera );
   }
   
   animate();
 };
-
-let wait = function(t){
-  setTimeout(()=>{
-    if(window.THREE==undefined){
-      wait(100);
-    }else{
-      init();
-    }
-  },t);
-}
-wait(100)
 
 let menu = document.createElement('div');
 menu.style.textAlign = "center";
