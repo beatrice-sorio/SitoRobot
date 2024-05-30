@@ -107,6 +107,8 @@ menu.appendChild(btn_menu);
 document.body.appendChild(menu);
 document.body.style.backgroundColor = "#1D2951"
 
+document.body.style.margin = "5px";
+
 clicked_f = ()=>{
   menu.style.display = "none";
   renderer.domElement.style.display = "block";
@@ -128,15 +130,6 @@ btn_menu.onclick = ()=>{
   f(100,0);
 }
 
-/*
-let canvas = document.createElement('canvas');
-let ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-canvas.style.display = 'block';
-document.body.appendChild(canvas);*/
-document.body.style.margin = "5px";
-
 function onResize(){
   let biggest = window.innerWidth>window.innerHeight?window.innerWidth:window.innerHeight;
   title.style.fontSize = biggest/15 + "px";
@@ -147,8 +140,6 @@ function onResize(){
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
   }
-  //canvas.width = window.innerWidth;
-  //canvas.height = window.innerHeight;
 }
 
 onResize();
