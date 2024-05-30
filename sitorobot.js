@@ -10,7 +10,6 @@ threejs.innerHTML += "import * as GLTFLoader from 'three/addons/loaders/GLTFLoad
 threejs.innerHTML += "window.initTHREE(THREE,GLTFLoader.GLTFLoader);";
 document.body.appendChild(threejs);
 
-let moveArm = ()=>null;
 let renderer = null;
 let camera = null;
 
@@ -64,11 +63,11 @@ window.initTHREE = (THREE,GLTFLoader)=>{
   camera.position.set(0,0,0);
   camera.lookAt(0,0,-7);
 
-  let dati;
-  moveArm = (evento)=>{
+  let dati; 
+  (new EventSource('/events')).addEventListener('message', (evento)=>{
     dati = JSON.parse(evento.data);
     console.log(dati);
-  }
+  });
 
   let dt = 0;
   let animate = ()=>{
@@ -142,5 +141,4 @@ document.body.style.margin = "5px";
 
 btn_menu.addEventListener("click",onClickAnim);
 window.addEventListener("resize",onResize);
-(new EventSource('/events')).addEventListener('message', moveArm);
 window.dispatchEvent(new Event('resize'));
