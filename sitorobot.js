@@ -13,6 +13,7 @@ document.body.appendChild(threejs);
 let renderer = null;
 let moveArm = null;
 let camera = null;
+let braccio = null;
 
 window.initTHREE = (THREE,GLTFLoader)=>{
   const loader = new GLTFLoader();
@@ -25,18 +26,38 @@ window.initTHREE = (THREE,GLTFLoader)=>{
   scene.background = new THREE.Color(0xffffff);
   camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
-  const braccio = new THREE.Group();
-  const b1 = new THREE.Mesh(new THREE.BoxGeometry( 1, 1, 1 ), new THREE.MeshBasicMaterial( { color: 0x002f00 } ));
-  b1.position.set(0,-4,0);
-  const b2 = new THREE.Mesh(new THREE.BoxGeometry( 1, 1, 1 ), new THREE.MeshBasicMaterial( { color: 0x002f00 } ));
-  b2.position.set(0,-2,0);
-  braccio.add(b1);
-  braccio.add(b2);
+  braccio = new THREE.Group();
   scene.add(braccio);
-  braccio.position.set(0,0,-10);
+
+  loader.load("https://raw.githubusercontent.com/beatrice-sorio/SitoRobot/main/models/Braccio%20fisso.glb",(GLTF)=>{
+    braccio.add(GLTF.scene);
+  })
+  loader.load("https://raw.githubusercontent.com/beatrice-sorio/SitoRobot/main/models/Braccio1.glb",(GLTF)=>{
+    GLTF.scene.rotateX(Math.PI*.5);
+    GLTF.scene.position.set(0.02018,.11657,-0.01306)
+    braccio.add(GLTF.scene);
+  })
+  loader.load("https://raw.githubusercontent.com/beatrice-sorio/SitoRobot/main/models/Braccio3.glb",(GLTF)=>{
+    GLTF.scene.rotateX(Math.PI*.5);
+    GLTF.scene.rotateZ(Math.PI);  
+    GLTF.scene.position.set(-0.27,.11657,0)
+    braccio.add(GLTF.scene);
+  })
+  loader.load("https://raw.githubusercontent.com/beatrice-sorio/SitoRobot/main/models/Ring%20esterno.glb",(GLTF)=>{
+    GLTF.scene.rotateX(Math.PI*.5);
+    GLTF.scene.position.set(-0.15,.11657,0)
+    braccio.add(GLTF.scene);
+  })
+  loader.load("https://raw.githubusercontent.com/beatrice-sorio/SitoRobot/main/models/Tavola%20rotante.glb",(GLTF)=>{
+    GLTF.scene.position.set(0,-0.02,0)  
+    braccio.add(GLTF.scene);
+  })
+
+  braccio.scale.set(5,5,5);
+  braccio.position.set(0,0,-7);
 
   camera.position.set(0,0,0);
-  camera.lookAt(0,0,-10);
+  camera.lookAt(0,0,-5);
 
   /**
    * Importare e posizionare le braccia
@@ -51,8 +72,7 @@ window.initTHREE = (THREE,GLTFLoader)=>{
   let animate = ()=>{
     requestAnimationFrame( animate );
     dt = clock.getDelta();
-    braccio.rotateY(Math.PI*.5*dt)
-    b2.rotateX(Math.PI*.5*dt)
+    braccio.rotateY(dt)
     renderer.render( scene, camera );
   }
   
@@ -121,6 +141,7 @@ function onResize(){
     renderer.setSize( window.innerWidth, window.innerHeight );
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
+    braccio.position.set(0,0,-5/camera.aspect)
   }
   //canvas.width = window.innerWidth;
   //canvas.height = window.innerHeight;
