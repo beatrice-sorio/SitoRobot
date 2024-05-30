@@ -10,8 +10,8 @@ threejs.innerHTML += "import * as GLTFLoader from 'three/addons/loaders/GLTFLoad
 threejs.innerHTML += "window.initTHREE(THREE,GLTFLoader.GLTFLoader);";
 document.body.appendChild(threejs);
 
+let moveArm = ()=>null;
 let renderer = null;
-let moveArm = null;
 let camera = null;
 
 window.initTHREE = (THREE,GLTFLoader)=>{
@@ -168,8 +168,7 @@ if (!!window.EventSource) {
 
   source.addEventListener('message', function (e) {
     try {
-      let obj = JSON.parse(e.data);
-      if(moveArm) moveArm(obj);
+      moveArm(JSON.parse(e.data));
     } catch (error) {     
       console.log("message", e.data); 
     }
