@@ -64,15 +64,15 @@ window.initTHREE = (THREE,GLTFLoader)=>{
   camera.position.set(0,0,0);
   camera.lookAt(0,0,-7);
 
-  moveArm = (dati)=>{
+  let dati;
+  moveArm = (evento)=>{
+    dati = JSON.parse(evento.data);
   }
 
   let dt = 0;
   let animate = ()=>{
     requestAnimationFrame( animate );
     dt = clock.getDelta();
-    braccio.rotateY(dt*.4)
-    braccio1.rotateZ(dt);
     renderer.render( scene, camera );
   }
 
@@ -84,50 +84,22 @@ window.initTHREE = (THREE,GLTFLoader)=>{
   animate();
 };
 
-let menu = document.createElement('div');
-menu.style.textAlign = "center";
-menu.style.color = "#73C2FB"
+function canvasAnim(){
+  renderer.domElement.style.opacity-=-0.01;
+  if(renderer.domElement.style.opacity<1) return setTimeout(canvasAnim,10); 
+  renderer.domElement.style.opacity = 1;
+}
 
-let div_title = document.createElement('div');
-let title = document.createElement('label');
-title.textContent = "BRACCIO ROBOTICO";
-title.style.fontFamily = "'courier new',monospace";
-div_title.style.borderBottom = "solid 5px #73C2FB";
-div_title.style.borderTop = "solid 5px #73C2FB";
-div_title.style.marginTop = "100px"
-div_title.appendChild(title);
-menu.appendChild(div_title);
-
-let btn_menu = document.createElement('button');
-btn_menu.style.backgroundColor = "#73C2FB";
-btn_menu.style.borderRadius = "100%"
-btn_menu.style.borderColor = "#111E6C"
-btn_menu.style.marginTop = "300px"
-menu.appendChild(btn_menu);
-document.body.appendChild(menu);
-document.body.style.backgroundColor = "#1D2951"
-
-document.body.style.margin = "5px";
-
-clicked_f = ()=>{
+function onClickAnim(){
+  menu.style.opacity-=0.01;
+  if(menu.style.opacity>0) return setTimeout(onClickAnim,10); 
   menu.style.display = "none";
   renderer.domElement.style.display = "block";
   document.body.style.margin = "0";
   document.body.style.overflow = "hidden";
+  renderer.domElement.style.opacity = 0;
   document.body.appendChild( renderer.domElement );
-  renderer.domElement.style.display = "block";
-}
-
-btn_menu.onclick = ()=>{
-  if(menu.style.opacity) return;
-  let f = (t,t2)=>{ setTimeout(()=>{
-    t2 = 10;
-    if(t>0){
-      menu.style.opacity=t/100;
-      f(t-1,t2);
-    }else clicked_f();
-  },t2)};
-  f(100,0);
+  canvasAnim();
 }
 
 function onResize(){
@@ -142,26 +114,32 @@ function onResize(){
   }
 }
 
-onResize();
-window.onresize = onResize;
+let menu = document.createElement('div');
+menu.style.textAlign = "center";
+menu.style.color = "#000000"
+menu.style.opacity = 1;
 
-if (!!window.EventSource) {
-  var source = new EventSource('/events');
+let div_title = document.createElement('div');
+let title = document.createElement('label');
+title.innerHTML = "BRACCIO<br>ROBOTICO";
+div_title.style.textAlign = "left";
+title.style.fontFamily = "'courier new',monospace";
+div_title.style.marginTop = "90px"
+div_title.appendChild(title);
+menu.appendChild(div_title);
 
-  source.addEventListener('open', function (e) {
-    console.log("Events Connected");
-  }, false);
-  source.addEventListener('error', function (e) {
-    if (e.target.readyState != EventSource.OPEN) {
-      console.log("Events Disconnected");
-    }
-  }, false);
+let btn_menu = document.createElement('button');
+btn_menu.style.backgroundColor = "#000000";
+btn_menu.style.borderRadius = "100%"
+btn_menu.style.borderColor = "#000000"
+btn_menu.style.marginTop = "200px"
+menu.appendChild(btn_menu);
 
-  source.addEventListener('message', function (e) {
-    try {
-      moveArm(JSON.parse(e.data));
-    } catch (error) {     
-      console.log("message", e.data); 
-    }
-  }, false);
-}
+document.body.appendChild(menu);
+document.body.style.backgroundColor = "#ffffffff"
+document.body.style.margin = "5px";
+
+btn_menu.addEventListener("click",onClickAnim);
+window.addEventListener("resize",onResize);
+(new EventSource('/events')).addEventListener('message', moveArm);
+window.dispatchEvent(new Event('resize'));
