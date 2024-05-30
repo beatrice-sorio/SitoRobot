@@ -67,6 +67,7 @@ window.initTHREE = (THREE,GLTFLoader)=>{
   let dati;
   moveArm = (evento)=>{
     dati = JSON.parse(evento.data);
+    console.log(dati);
   }
 
   let dt = 0;
