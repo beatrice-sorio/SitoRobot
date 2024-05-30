@@ -66,7 +66,10 @@ window.initTHREE = (THREE,GLTFLoader)=>{
   let dati; 
   (new EventSource('/events')).addEventListener('message', (evento)=>{
     dati = JSON.parse(evento.data);
-    console.log(dati);
+    braccio1.rotation.set(braccio1.rotation.x,braccio1.rotation.y,Math.PI*Number(dati.t1)/4095);
+    braccio2.rotation.set(braccio2.rotation.x,braccio2.rotation.y,Math.PI*Number(dati.t2)/4095);
+    braccio3.rotation.set(braccio3.rotation.x,braccio3.rotation.y,Math.PI*Number(dati.t3)/4095);
+    braccio4.rotation.set(braccio4.rotation.x,braccio4.rotation.y,Math.PI*Number(dati.t4)/4095);
   });
 
   let dt = 0;
