@@ -26,11 +26,13 @@ window.initTHREE = (THREE,GLTFLoader)=>{
   camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
   const braccio = new THREE.Group();
-  scene.add(braccio);
-
   const braccio1 = new THREE.Group();
   const braccio2 = new THREE.Group();
   const braccio3 = new THREE.Group();
+  scene.add(braccio);
+  braccio.add(braccio1);
+  braccio1.add(braccio2);
+  braccio2.add(braccio3);
 
   loader.load("https://raw.githubusercontent.com/beatrice-sorio/SitoRobot/main/models/Braccio%20fisso.glb",(GLTF)=>{
     braccio.add(GLTF.scene);
@@ -43,18 +45,15 @@ window.initTHREE = (THREE,GLTFLoader)=>{
     GLTF.scene.rotateX(Math.PI*.5);
     braccio1.position.set(0.04,.11,0.01)
     braccio1.add(GLTF.scene);
-    braccio.add(braccio1);
     loader.load("https://raw.githubusercontent.com/beatrice-sorio/SitoRobot/main/models/Ring%20esterno.glb",(GLTF)=>{
       GLTF.scene.rotateX(Math.PI*.5);
       braccio2.position.set(-0.17,0,0)
       braccio2.add(GLTF.scene)
-      braccio1.add(braccio2);
       loader.load("https://raw.githubusercontent.com/beatrice-sorio/SitoRobot/main/models/Braccio3.glb",(GLTF)=>{
         GLTF.scene.rotateX(Math.PI*.5);
         GLTF.scene.rotateZ(Math.PI);  
         braccio3.position.set(-0.1,0,0)
         braccio3.add(GLTF.scene);
-        braccio2.add(braccio3);
       })
     })
   })
