@@ -22,6 +22,7 @@ typedef struct struct_message {
   int t2;
   int t3;
   int t4;
+  boolean p;
 } struct_message;
 
 // Create a struct_message called myData
@@ -58,6 +59,10 @@ void setup() {
   peerInfo.encrypt = false;
 
   myData.t1 = 0;
+  myData.t2 = 0;
+  myData.t3 = 0;
+  myData.t4 = 0;
+  myData.p = 0;
   
   // Add peer        
   if (esp_now_add_peer(&peerInfo) != ESP_OK){
@@ -68,12 +73,12 @@ void setup() {
  
 void loop() {
   // Set values to send
-  if(analogRead(34)!=myData.t1){   //quando il pin 34 cambia invia nuovi dati
-    Serial.println(analogRead(34));  
-    myData.t1 = analogRead(34);   //dato trimmer
-    myData.t2 = 0;
-    myData.t3 = 0;
-    myData.t4 = 0;
+  if(analogRead(32)!=myData.t1||analogRead(33)!=myData.t2||analogRead(34)!=myData.t3||analogRead(35)!=myData.t4){   //quando il pin 34 cambia invia nuovi dati 
+    myData.t1 = analogRead(32);   //dato trimmer
+    myData.t2 = analogRead(33);
+    myData.t3 = analogRead(34);
+    myData.t4 = analogRead(35);
+    myData.p = 0;
   
     // Send message via ESP-NOW
     esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &myData, sizeof(myData));
@@ -85,5 +90,5 @@ void loop() {
       Serial.println("Error sending the data");
     }
   }
-  delay(50); //ogni quanto invia i dati
+  delay(250); //ogni quanto invia i dati
 }
