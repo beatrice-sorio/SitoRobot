@@ -14,6 +14,7 @@ typedef struct struct_message {
   int t2;
   int t3;
   int t4;
+  boolean p;
 } struct_message;
 
 struct_message incomingReadings;
@@ -37,6 +38,7 @@ void OnDataRecv(const uint8_t * mac_addr, const uint8_t *incomingData, int len) 
   board["t2"] = incomingReadings.t2;
   board["t3"] = incomingReadings.t3;
   board["t4"] = incomingReadings.t4;
+  board["p"] = incomingReadings.p;
   String jsonString = JSON.stringify(board);
   events.send(jsonString.c_str(), NULL, millis());
 }
