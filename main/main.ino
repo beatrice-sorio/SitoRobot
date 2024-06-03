@@ -84,7 +84,7 @@ void setup() {
   }
 
   //Una volta inizializzato ESP-NOW, l'evento recv CB viene associato alla funzione OnDataRecv 
-  //per avere lo stato del pacchetto ricevuto
+  //per avere le informazioni del pacchetto ricevuto
   esp_now_register_recv_cb(OnDataRecv);
 
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -95,7 +95,7 @@ void setup() {
     if(client->lastId()){
       Serial.printf("Client reconnected! Last message ID that it got is: %u\n", client->lastId());
     }
-    // Invio di un pacchetto con il messaggio "hello!"
+    // Invio di un pacchetto con il messaggio "hello!", il tempo attuale e tempo di riconnessione di un 1 sec
     client->send("hello!", NULL, millis(), 10000);
   });
   server.addHandler(&events);
