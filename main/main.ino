@@ -3,12 +3,11 @@
 #include "ESPAsyncWebServer.h"
 #include <Arduino_JSON.h>
 
-// Replace with your network credentials (STATION)
+// Sostituisci con le tue credenziali di rete (STATION)
 const char* ssid = "AndroidAP3416";
 const char* password = "f28a2e0de21e";
 
-// Structure example to receive data
-// Must match the sender structure
+// Struttura per ricevere dati, deve essere ugaule nel mittente
 typedef struct struct_message {
   int t1;
   int t2;
@@ -24,9 +23,9 @@ JSONVar board;
 AsyncWebServer server(80);
 AsyncEventSource events("/events");
 
-// callback function that will be executed when data is received
+// Funzione chiamata quando i dati vengono ricevuti
 void OnDataRecv(const uint8_t * mac_addr, const uint8_t *incomingData, int len) {
-  // Copies the sender mac address to a string
+  // Copia il mac address in una stringa
   char macStr[18];
   Serial.print("Packet received from: ");
   snprintf(macStr, sizeof(macStr), "%02x:%02x:%02x:%02x:%02x:%02x",
@@ -43,6 +42,7 @@ void OnDataRecv(const uint8_t * mac_addr, const uint8_t *incomingData, int len) 
   events.send(jsonString.c_str(), NULL, millis());
 }
 
+//Stringa da inviare per il codice HTML
 const char index_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE HTML><html>
 <head>
@@ -60,14 +60,13 @@ const char index_html[] PROGMEM = R"rawliteral(
 </html>)rawliteral";
 
 void setup() {
-  // Initialize Serial Monitor
   Serial.begin(115200);
   Serial.println(WiFi.macAddress());
 
-  // Set the device as a Station and Soft Access Point simultaneously
+  // Imposta il dispositivo come WiFi Station e come Soft Access Point 
   WiFi.mode(WIFI_AP_STA);
  
-  // Set device as a Wi-Fi Station
+  // Imposta il dispositivo come WiFi Station
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
@@ -78,7 +77,7 @@ void setup() {
   Serial.print("Wi-Fi Channel: ");
   Serial.println(WiFi.channel());
 
-  // Init ESP-NOW
+  // Inizializzazione ESP-NOW
   if (esp_now_init() != ESP_OK) {
     Serial.println("Error initializing ESP-NOW");
     return;
