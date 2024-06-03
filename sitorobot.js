@@ -81,7 +81,7 @@ window.initTHREE = (THREE,GLTFLoader)=>{ //funzione associata richiamata dal mod
     renderer.render( scene, camera );
   }
 
-  window.addEventListener("wheel",(ev)=>{ //scroll della rotellina associato al distanziamento dal braccio
+  window.addEventListener("wheel",(ev)=>{ //scroll del mouse associato al distanziamento dal braccio
     braccio.position.z -= ev.deltaY/100;
     camera.lookAt(0,0,braccio.position.z);
   });
