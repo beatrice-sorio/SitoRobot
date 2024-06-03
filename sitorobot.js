@@ -119,7 +119,8 @@ function onResize(){ //quando viene cambiata la dimensione della finestra
   }
 }
 
-let menu = document.createElement('div'); //creazione programmatica della pagina html
+//creazione programmatica della pagina html
+let menu = document.createElement('div'); 
 menu.style.textAlign = "center";
 menu.style.color = "#000000"
 menu.style.opacity = 1;
