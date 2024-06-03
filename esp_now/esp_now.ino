@@ -7,8 +7,7 @@ uint8_t broadcastAddress[] = {0x08, 0xB6, 0x1F, 0xB9, 0x4F, 0x9C};
 
 constexpr char WIFI_SSID[] = "YOUR_WIFI_SSID";
 
-// Structure example to send data
-// Must match the receiver structure
+// Struttura per inviare dati, deve essere ugaule nel ricevitore
 typedef struct struct_message {
   int t1;
   int t2;
@@ -17,12 +16,12 @@ typedef struct struct_message {
   bool p;
 } struct_message;
 
-// Create a struct_message called myData
+// Crea una struttura per il messaggio chiamata myData
 struct_message myData;
 
 esp_now_peer_info_t peerInfo;
 
-// callback when data is sent
+// Funzione richiamata quando i dati vengono inviati
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   Serial.print("\r\nLast Packet Send Status:\t");
   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
@@ -40,13 +39,12 @@ int32_t getWiFiChannel(const char *ssid) {
 }
 
 void setup() {
-  // Init Serial Monitor
   Serial.begin(115200);
  
-  // Set device as a Wi-Fi Station
+  // Set device come Wi-Fi Station
   WiFi.mode(WIFI_STA);
 
-  // Init ESP-NOW
+  // Inizializzazione ESP-NOW
   esp_wifi_set_promiscuous(true);
   esp_wifi_set_channel(getWiFiChannel(WIFI_SSID), WIFI_SECOND_CHAN_NONE);
   esp_wifi_set_promiscuous(false);
@@ -56,11 +54,11 @@ void setup() {
     return;
   }
 
-  // Once ESPNow is successfully Init, we will register for Send CB to
-  // get the status of Trasnmitted packet
+  //Una volta inizializzato ESP-NOW, registriamo l'evento Send CB alla funzione OnDataSent 
+  //per avere lo stato del pacchetto trasmesso 
   esp_now_register_send_cb(OnDataSent);
   
-  // Register peer
+  // Registra il peer
   memcpy(peerInfo.peer_addr, broadcastAddress, 6);
   peerInfo.channel = 0;  
   peerInfo.encrypt = false;
@@ -71,7 +69,7 @@ void setup() {
   myData.t4 = 0;
   myData.p = 0;
   
-  // Add peer        
+  // Aggiungi peer        
   if (esp_now_add_peer(&peerInfo) != ESP_OK){
     Serial.println("Failed to add peer");
     return;
@@ -79,8 +77,8 @@ void setup() {
 }
  
 void loop() {
-  // Set values to send
-  if(analogRead(32)!=myData.t1||analogRead(33)!=myData.t2||analogRead(34)!=myData.t3||analogRead(35)!=myData.t4){   //quando il pin 34 cambia invia nuovi dati
+  // Set valori da inviare
+  if(analogRead(32)!=myData.t1||analogRead(33)!=myData.t2||analogRead(34)!=myData.t3||analogRead(35)!=myData.t4){   //quando i pin cambiano inviano nuovi dati
     myData.t1 = 0;   //dato trimmer
     myData.t2 = 0;
     myData.t3 = 0;
@@ -97,7 +95,7 @@ void loop() {
     myData.t3 = map(myData.t3/50,0,4095,0,21000);
     myData.t4 = map(myData.t4/50,0,4095,0,21000);
   
-    // Send message via ESP-NOW
+    // Invio messaggio tramite ESP-NOW
     esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &myData, sizeof(myData));
    
     if (result == ESP_OK) {
