@@ -73,12 +73,22 @@ void setup() {
  
 void loop() {
   // Set values to send
-  if(analogRead(32)!=myData.t1||analogRead(33)!=myData.t2||analogRead(34)!=myData.t3||analogRead(35)!=myData.t4){   //quando il pin 34 cambia invia nuovi dati 
-    myData.t1 = analogRead(32);   //dato trimmer
-    myData.t2 = analogRead(33);
-    myData.t3 = analogRead(34);
-    myData.t4 = analogRead(35);
+  if(analogRead(32)!=myData.t1||analogRead(33)!=myData.t2||analogRead(34)!=myData.t3||analogRead(35)!=myData.t4){   //quando il pin 34 cambia invia nuovi dati
+    myData.t1 = 0;   //dato trimmer
+    myData.t2 = 0;
+    myData.t3 = 0;
+    myData.t4 = 0;
+    for(int i = 0;i<50;i++){
+      myData.t1+=analogRead(32);
+      myData.t2+=analogRead(33);
+      myData.t3+=analogRead(34);
+      myData.t4+=analogRead(35);
+    }
     myData.p = 0;
+    myData.t1 = map(myData.t1/50,0,4095,0,21000);
+    myData.t2 = map(myData.t2/50,0,4095,0,21000);
+    myData.t3 = map(myData.t3/50,0,4095,0,21000);
+    myData.t4 = map(myData.t4/50,0,4095,0,21000);
   
     // Send message via ESP-NOW
     esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &myData, sizeof(myData));
