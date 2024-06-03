@@ -14,7 +14,7 @@ typedef struct struct_message {
   int t2;
   int t3;
   int t4;
-  boolean p;
+  bool p;
 } struct_message;
 
 struct_message incomingReadings;
