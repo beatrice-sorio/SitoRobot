@@ -22,7 +22,7 @@ typedef struct struct_message {
   int t2;
   int t3;
   int t4;
-  boolean p;
+  bool p;
 } struct_message;
 
 // Create a struct_message called myData
@@ -84,7 +84,7 @@ void loop() {
       myData.t3+=analogRead(34);
       myData.t4+=analogRead(35);
     }
-    myData.p = 0;
+    myData.p = digitalRead(12);
     myData.t1 = map(myData.t1/50,0,4095,0,21000);
     myData.t2 = map(myData.t2/50,0,4095,0,21000);
     myData.t3 = map(myData.t3/50,0,4095,0,21000);
