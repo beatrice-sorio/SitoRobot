@@ -15,6 +15,8 @@
 // REPLACE WITH YOUR RECEIVER MAC Address
 uint8_t broadcastAddress[] = {0x08, 0xB6, 0x1F, 0xB9, 0x4F, 0x9C};
 
+constexpr char WIFI_SSID[] = "YOUR_WIFI_SSID";
+
 // Structure example to send data
 // Must match the receiver structure
 typedef struct struct_message {
@@ -35,7 +37,18 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   Serial.print("\r\nLast Packet Send Status:\t");
   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
 }
- 
+
+int32_t getWiFiChannel(const char *ssid) {
+  if (int32_t n = WiFi.scanNetworks()) {
+      for (uint8_t i=0; i<n; i++) {
+          if (!strcmp(ssid, WiFi.SSID(i).c_str())) {
+              return WiFi.channel(i);
+          }
+      }
+  }
+  return 0;
+}
+
 void setup() {
   // Init Serial Monitor
   Serial.begin(115200);
@@ -44,6 +57,7 @@ void setup() {
   WiFi.mode(WIFI_STA);
 
   // Init ESP-NOW
+  esp_wifi_set_channel(getWiFiChannel(WIFI_SSID), WIFI_SECOND_CHAN_NONE);
   if (esp_now_init() != ESP_OK) {
     Serial.println("Error initializing ESP-NOW");
     return;
