@@ -68,10 +68,10 @@ window.initTHREE = (THREE,GLTFLoader)=>{ //funzione associata richiamata dal mod
   (new EventSource('/events')).addEventListener('message', (evento)=>{
     dati = JSON.parse(evento.data);
     console.log(dati);
-    braccio1.rotation.set(braccio1.rotation.x,braccio1.rotation.y,-Math.PI*Number(dati.t1)/4095);
-    braccio2.rotation.set(braccio2.rotation.x,braccio2.rotation.y,-Math.PI*Number(dati.t2)/4095);
-    braccio3.rotation.set(braccio3.rotation.x,braccio3.rotation.y,-Math.PI*Number(dati.t3)/4095);
-    braccio.rotation.set(braccio.rotation.x,-Math.PI*Number(dati.t4)/4095,braccio.rotation.z);
+    braccio1.rotation.set(braccio1.rotation.x,braccio1.rotation.y,-Math.PI*Number(dati.t1)/21000);
+    braccio2.rotation.set(braccio2.rotation.x,braccio2.rotation.y,-Math.PI*Number(dati.t2)/21000);
+    braccio3.rotation.set(braccio3.rotation.x,braccio3.rotation.y,-Math.PI*Number(dati.t3)/21000);
+    braccio.rotation.set(braccio.rotation.x,-Math.PI*Number(dati.t4)/21000,braccio.rotation.z);
   });
 
   let dt = 0; //delta tempo
