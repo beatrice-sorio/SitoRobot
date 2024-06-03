@@ -10,6 +10,7 @@
 */
 
 #include <esp_now.h>
+#include <esp_wifi.h>
 #include <WiFi.h>
 
 // REPLACE WITH YOUR RECEIVER MAC Address
@@ -57,7 +58,10 @@ void setup() {
   WiFi.mode(WIFI_STA);
 
   // Init ESP-NOW
+  esp_wifi_set_promiscuous(true);
   esp_wifi_set_channel(getWiFiChannel(WIFI_SSID), WIFI_SECOND_CHAN_NONE);
+  esp_wifi_set_promiscuous(false);
+
   if (esp_now_init() != ESP_OK) {
     Serial.println("Error initializing ESP-NOW");
     return;
